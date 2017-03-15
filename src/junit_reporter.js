@@ -403,7 +403,7 @@
         }
 
         function suiteAsXml(suite) {
-            var xml = '\n <testsuite name="' + self.namespace + '' + getFullyQualifiedSuiteName(suite) + '"';
+            var xml = '\n <testsuite name="' + getFullyQualifiedSuiteName(suite) + '"';
             xml += ' timestamp="' + ISODateString(suite._startTime) + '"';
             xml += ' hostname="localhost"'; // many CI systems like Jenkins don't care about this, but junit spec says it is required
             xml += ' time="' + elapsed(suite._startTime, suite._endTime) + '"';
@@ -427,7 +427,7 @@
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
             
-            var xml = '\n  <testcase classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            var xml = '\n  <testcase classname="' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
 
@@ -452,7 +452,7 @@
             if (testCaseBody || delegates.systemOut) {
                 xml += '>' + testCaseBody;
                 if (delegates.systemOut) {
-                    xml += '\n   <system-out>' + self.namespace + '' + trim(escapeInvalidXmlChars(delegates.systemOut(spec, getFullyQualifiedSuiteName(spec._suite, true)))) + '</system-out>';
+                    xml += '\n   <system-out>' + trim(escapeInvalidXmlChars(delegates.systemOut(spec, getFullyQualifiedSuiteName(spec._suite, true)))) + '</system-out>';
                 }
                 xml += '\n  </testcase>';
             } else {
@@ -474,7 +474,7 @@
         if (self.stylesheetPath) {
             prefix += '\n<?xml-stylesheet type="text/xsl" href="' + self.stylesheetPath + '" ?>';
         }
-        prefix += '\n<testsuites>';
+        prefix += '\n<testsuites name="+'self.namespace'+">';
         var suffix = '\n</testsuites>';
         function wrapOutputAndWriteFile(filename, text) {
             if (filename.substr(-4) !== '.xml') { filename += '.xml'; }
