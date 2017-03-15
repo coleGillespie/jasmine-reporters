@@ -171,6 +171,7 @@
         options = options || {};
         self.savePath = options.savePath || '';
         self.consolidate = options.consolidate === UNDEFINED ? true : options.consolidate;
+        self.namespace = options.namespace || '';
         self.consolidateAll = self.consolidate !== false && (options.consolidateAll === UNDEFINED ? true : options.consolidateAll);
         self.useDotNotation = options.useDotNotation === UNDEFINED ? true : options.useDotNotation;
         self.useFullTestName = options.useFullTestName === UNDEFINED ? false : options.useFullTestName;
@@ -402,7 +403,7 @@
         }
 
         function suiteAsXml(suite) {
-            var xml = '\n <testsuite name="' + getFullyQualifiedSuiteName(suite) + '"';
+            var xml = '\n <testsuite name="' + self.namespace + '' + getFullyQualifiedSuiteName(suite) + '"';
             xml += ' timestamp="' + ISODateString(suite._startTime) + '"';
             xml += ' hostname="localhost"'; // many CI systems like Jenkins don't care about this, but junit spec says it is required
             xml += ' time="' + elapsed(suite._startTime, suite._endTime) + '"';
@@ -426,7 +427,7 @@
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
             
-            var xml = '\n  <testcase classname="' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            var xml = '\n  <testcase classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
 
@@ -451,7 +452,7 @@
             if (testCaseBody || delegates.systemOut) {
                 xml += '>' + testCaseBody;
                 if (delegates.systemOut) {
-                    xml += '\n   <system-out>' + trim(escapeInvalidXmlChars(delegates.systemOut(spec, getFullyQualifiedSuiteName(spec._suite, true)))) + '</system-out>';
+                    xml += '\n   <system-out>' + self.namespace + '' + trim(escapeInvalidXmlChars(delegates.systemOut(spec, getFullyQualifiedSuiteName(spec._suite, true)))) + '</system-out>';
                 }
                 xml += '\n  </testcase>';
             } else {
