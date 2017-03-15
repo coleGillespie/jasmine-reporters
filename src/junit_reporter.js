@@ -474,7 +474,7 @@
         if (self.stylesheetPath) {
             prefix += '\n<?xml-stylesheet type="text/xsl" href="' + self.stylesheetPath + '" ?>';
         }
-        prefix += '\n<testsuites name="+'self.namespace'+">';
+        prefix += '\n<testsuites name="+' +self.namespace +'+">';
         var suffix = '\n</testsuites>';
         function wrapOutputAndWriteFile(filename, text) {
             if (filename.substr(-4) !== '.xml') { filename += '.xml'; }
