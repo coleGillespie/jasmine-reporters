@@ -421,7 +421,7 @@
             // }
             // xml += '>';
 
-            var xml = '\n ';
+            var xml = '\n';
             if(suite._specs.length) {
                 totalTests = totalTests + Number(suite._specs.length);
             }
@@ -447,8 +447,9 @@
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
             
-            var xml = '\n  <testcase classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            var xml = '\n  <testcase';
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
+            xml += ' classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
 
             var testCaseBody = '';
@@ -474,7 +475,7 @@
                 if (delegates.systemOut) {
                     xml += '\n   <system-out>' + trim(escapeInvalidXmlChars(delegates.systemOut(spec, getFullyQualifiedSuiteName(spec._suite, true)))) + '</system-out>';
                 }
-                xml += '\n  </testcase>';
+                xml += '</testcase>';
             } else {
                 xml += ' />';
             }
