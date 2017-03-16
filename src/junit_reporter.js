@@ -401,33 +401,53 @@
                 return escapeInvalidXmlChars(fullName);
             }
         }
-
+        var totalTests =0;
+        var totalTestsSkipped = 0;
+        var totalTestsDisabled = 0;
+        var totalTestsFailures = 0;
         function suiteAsXml(suite) {
-            var xml = '\n <testsuite name="' + getFullyQualifiedSuiteName(suite) + '"';
-            xml += ' timestamp="' + ISODateString(suite._startTime) + '"';
-            xml += ' hostname="localhost"'; // many CI systems like Jenkins don't care about this, but junit spec says it is required
-            xml += ' time="' + elapsed(suite._startTime, suite._endTime) + '"';
-            xml += ' errors="0"';
-            xml += ' tests="' + suite._specs.length + '"';
-            xml += ' skipped="' + suite._skipped + '"';
-            xml += ' disabled="' + suite._disabled + '"';
-            // Because of JUnit's flat structure, only include directly failed tests (not failures for nested suites)
-            xml += ' failures="' + suite._failures + '"';
-            if (self.package) {
-                xml += ' package="' + self.package + '"';
+            // var xml = '\n <testsuite name="' + getFullyQualifiedSuiteName(suite) + '"';
+            // xml += ' timestamp="' + ISODateString(suite._startTime) + '"';
+            // xml += ' hostname="localhost"'; // many CI systems like Jenkins don't care about this, but junit spec says it is required
+            // xml += ' time="' + elapsed(suite._startTime, suite._endTime) + '"';
+            // xml += ' errors="0"';
+            // xml += ' tests="' + suite._specs.length + '"';
+            // xml += ' skipped="' + suite._skipped + '"';
+            // xml += ' disabled="' + suite._disabled + '"';
+            // // Because of JUnit's flat structure, only include directly failed tests (not failures for nested suites)
+            // xml += ' failures="' + suite._failures + '"';
+            // if (self.package) {
+            //     xml += ' package="' + self.package + '"';
+            // }
+            // xml += '>';
+
+            var xml = '\n ';
+            if(suite._specs.length) {
+                totalTests = totalTests + Number(suite._specs.length);
             }
-            xml += '>';
+
+            if(suite._skipped) {
+                totalTestsSkipped = totalTestsSkipped + Number(suite._skipped);
+            }
+
+            if(suite._disabled) {
+                totalTestsDisabled = totalTestsDisabled + Number(suite._disabled);
+            }
+
+            if(suite._failures) {
+                totalTestsFailures = totalTestsFailures + Number(suite._failures);
+            }
 
             for (var i = 0; i < suite._specs.length; i++) {
                 xml += specAsXml(suite._specs[i]);
             }
-            xml += '\n </testsuite>';
+            xml += '\n';
             return xml;
         }
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
             
-            var xml = '\n  <testcase classname="' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            var xml = '\n  <testcase classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
 
@@ -474,8 +494,9 @@
         if (self.stylesheetPath) {
             prefix += '\n<?xml-stylesheet type="text/xsl" href="' + self.stylesheetPath + '" ?>';
         }
-        prefix += '\n<testsuites name="+' +self.namespace +'+">';
-        var suffix = '\n</testsuites>';
+        // testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2017-03-15T23:10:48" id="0" hostname="MLDUR1511215" tests="75" errors="0" failures="0" time="0.281">
+        prefix += '\n<testsuite name="'+self.namespace+'" package="" timestamp="" id="0" tests="'+totalTests+'" disabled="'+totalTestsDisabled+'" skipped="'+totalTestsSkipped+'" errors="" failures="'+totalTestsFailures+'"';
+        var suffix = '\n</testsuite>';
         function wrapOutputAndWriteFile(filename, text) {
             if (filename.substr(-4) !== '.xml') { filename += '.xml'; }
             self.writeFile(filename, (prefix + text + suffix));
