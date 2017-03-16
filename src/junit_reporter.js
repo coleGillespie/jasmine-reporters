@@ -450,9 +450,15 @@
             var splits = getFullyQualifiedSuiteName(spec._suite).split('.');
             var classname = splits[0]
             splits.shift();
-            var name = splits.join(' - ');
+            var name = splits.join(' -> ');
+            var t;
+            if(name.length > 0){
+                t = name + ' ' + testName
+            } else {
+                t = testName;
+            }
             var xml = '\n  <testcase';
-            xml += ' name="' + escapeInvalidXmlChars(name + ' ' + testName) + '"';
+            xml += ' name="' + escapeInvalidXmlChars(t) + '"';
             xml += ' classname="' + self.namespace + '.' + classname + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
             totalTime = totalTime + elapsed(spec._startTime, spec._endTime);
