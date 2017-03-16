@@ -501,7 +501,7 @@
             var d = new Date();
             var n = d.toISOString();
             // testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2017-03-15T23:10:48" id="0" hostname="MLDUR1511215" tests="75" errors="0" failures="0" time="0.281">
-            prefix += '\n<testsuite name="'+self.namespace+'" package="" timestamp="'+n+'" time="'+totalTime+'" id="0" tests="'+totalTests+'" disabled="'+totalTestsDisabled+'" skipped="'+totalTestsSkipped+'" errors="" failures="'+totalTestsFailures+'">';
+            prefix += '\n<testsuite name="'+self.namespace.replace(/_/g, ' ');+'" package="" timestamp="'+n+'" time="'+totalTime+'" id="0" tests="'+totalTests+'" disabled="'+totalTestsDisabled+'" skipped="'+totalTestsSkipped+'" errors="" failures="'+totalTestsFailures+'">';
             prefix += '  <properties><property name="suite.namespace" value="'+self.namespace+'"/></properties>';
             var suffix = '\n</testsuite>';
             if (filename.substr(-4) !== '.xml') { filename += '.xml'; }
