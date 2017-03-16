@@ -450,7 +450,7 @@
             
             var xml = '\n  <testcase';
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
-            xml += ' classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            xml += ' classname="' + self.namespace + '.' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
             totalTime = totalTime + elapsed(spec._startTime, spec._endTime);
             var testCaseBody = '';
