@@ -448,10 +448,9 @@
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
             var splits = getFullyQualifiedSuiteName(spec._suite).split('.');
-            var classname = splits[0] + '.' + splits[1];
+            var classname = splits[0]
             splits.shift();
-            splits.shift();
-            var name = splits.join(' ');
+            var name = splits.join(' - ');
             var xml = '\n  <testcase';
             xml += ' name="' + escapeInvalidXmlChars(name + ' ' + testName) + '"';
             xml += ' classname="' + self.namespace + '.' + classname + '"';
