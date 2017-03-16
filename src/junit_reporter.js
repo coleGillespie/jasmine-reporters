@@ -447,10 +447,14 @@
         }
         function specAsXml(spec) {
             var testName = self.useFullTestName ? spec.fullName : spec.description;
-            
+            var splits = getFullyQualifiedSuiteName(spec._suite).split('.');
+            var classname = splits[0] + '.' + splits[1];
+            splits.shift();
+            splits.shift();
+            var name = splits.join(' ');
             var xml = '\n  <testcase';
-            xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
-            xml += ' classname="' + self.namespace + '.' + getFullyQualifiedSuiteName(spec._suite) + '"';
+            xml += ' name="' + escapeInvalidXmlChars(name + ' ' + testName) + '"';
+            xml += ' classname="' + self.namespace + '.' + classname + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
             totalTime = totalTime + elapsed(spec._startTime, spec._endTime);
             var testCaseBody = '';
