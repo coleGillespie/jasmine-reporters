@@ -405,6 +405,7 @@
         var totalTestsSkipped = 0;
         var totalTestsDisabled = 0;
         var totalTestsFailures = 0;
+        var totalTime = 0;
         function suiteAsXml(suite) {
             // var xml = '\n <testsuite name="' + getFullyQualifiedSuiteName(suite) + '"';
             // xml += ' timestamp="' + ISODateString(suite._startTime) + '"';
@@ -451,7 +452,7 @@
             xml += ' name="' + escapeInvalidXmlChars(testName) + '"';
             xml += ' classname="' + self.namespace + '' + getFullyQualifiedSuiteName(spec._suite) + '"';
             xml += ' time="' + elapsed(spec._startTime, spec._endTime) + '"';
-
+            totalTime = totalTime + elapsed(spec._startTime, spec._endTime);
             var testCaseBody = '';
             if (isSkipped(spec) || isDisabled(spec)) {
                 if (spec.pendingReason) {
@@ -500,7 +501,8 @@
             var d = new Date();
             var n = d.toISOString();
             // testsuite name="PhantomJS 2.1.1 (Mac OS X 0.0.0)" package="" timestamp="2017-03-15T23:10:48" id="0" hostname="MLDUR1511215" tests="75" errors="0" failures="0" time="0.281">
-            prefix += '\n<testsuite name="'+self.namespace+'" package="" timestamp="'+n+'" id="0" tests="'+totalTests+'" disabled="'+totalTestsDisabled+'" skipped="'+totalTestsSkipped+'" errors="" failures="'+totalTestsFailures+'">';
+            prefix += '\n<testsuite name="'+self.namespace+'" package="" timestamp="'+n+'" time="'+totalTime+'" id="0" tests="'+totalTests+'" disabled="'+totalTestsDisabled+'" skipped="'+totalTestsSkipped+'" errors="" failures="'+totalTestsFailures+'">';
+            prefix += '  <properties><property name="suite.namespace" value="'+self.namespace+'"/></properties>';
             var suffix = '\n</testsuite>';
             if (filename.substr(-4) !== '.xml') { filename += '.xml'; }
             self.writeFile(filename, (prefix + text + suffix));
